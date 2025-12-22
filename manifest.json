@@ -1,0 +1,10 @@
+{
+  "short_name": "Finanzas",
+  "name": "Finanzas Jefe - Gestión",
+  "start_url": "./index.html",
+  "background_color": "#ecf0f1",
+  "display": "standalone",
+  "scope": "./",
+  "theme_color": "#2ecc71",
+  "icons": []
+}

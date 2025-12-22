@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Jefe PWA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2ecc71">
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+<body>
+    <header>
+        <h1>Finanzas Jefe</h1>
+        <div id="status-bar" style="font-size: 0.8rem; opacity: 0.8;">Conectado</div>
+    </header>
+
+    <main id="app" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+        
+        <section class="balance-card">
+            <h2 style="font-size: 0.9rem; color: #7f8c8d; text-transform: uppercase;">Saldo en Caja</h2>
+            <p id="total-amount">$ 0.00</p>
+            <button id="btn-cierre" style="background:var(--dark); color:white; border:none; padding:12px; border-radius:10px; width:100%; font-weight:bold; cursor:pointer; font-size: 1rem;">Cierre de Día</button>
+        </section>
+
+        <section id="seccion-lector" class="card" style="display: none; overflow: hidden;">
+            <h3>Escanear Código QR</h3>
+            <div id="reader" style="width: 100%;"></div>
+            <button id="btn-cerrar-lector" style="margin-top: 10px; background:var(--danger); color:white; border:none; padding:10px; border-radius:8px; width:100%;">Cerrar Cámara</button>
+        </section>
+
+        <section id="form-venta" class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 style="margin: 0;">Registrar Venta</h3>
+                <button id="btn-abrir-lector" style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">📷 QR</button>
+            </div>
+            <form id="venta-form">
+                <div class="input-group">
+                    <label>Producto</label>
+                    <select id="producto-tipo">
+                        <option value="0">Zapatos</option>
+                        <option value="1">Cholas</option>
+                        <option value="2">Sandalias</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Talla y Monto</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="talla" placeholder="Talla" required>
+                        <input type="number" id="monto" step="0.01" placeholder="Precio $" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Método de Pago</label>
+                    <select id="metodo">
+                        <option value="Efective">Efectivo</option>
+                        <option value="Pago Móvil">Pago Móvil</option>
+                        <option value="Punto">Punto de Venta</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-save">REGISTRAR VENTA</button>
+            </form>
+        </section>
+
+        <section id="seccion-inventario" class="card">
+            <h3>Stock Disponible</h3>
+            <div id="lista-inventario"></div>
+        </section>
+
+        <section id="seccion-historial" class="card">
+            <h3>Actividad Reciente</h3>
+            <div id="lista-historial"></div>
+        </section>
+
+    </main>
+
+    <nav class="actions">
+        <button class="btn-nav" onclick="window.scrollTo({top:0, behavior:'smooth'})">🏠 Inicio</button>
+        <button class="btn-nav" id="btn-venta-nav">➕ Vender</button>
+        <button class="btn-nav" id="btn-stock-nav">📦 Stock</button>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+</html>

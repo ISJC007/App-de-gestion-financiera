@@ -1,0 +1,5 @@
+
+git branch -M main
+git add .
+git commit -m "Subiendo archivos de la app financiera"
+git push -u origin main
