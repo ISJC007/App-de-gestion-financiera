@@ -1,24 +1,21 @@
 {
-  "short_name": "FinanzasJefe",
-  "name": "Sistema de Finanzas Jefe",
-  "description": "Control de inventario y ventas para calzado.",
+  "name": "Finanzas Jefe",
+  "short_name": "Finanzas",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#1e272e",
+  "theme_color": "#2ecc71",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "https://cdn-icons-png.flaticon.com/512/5521/5521903.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "192x192",
       "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "src": "https://cdn-icons-png.flaticon.com/192/5521/5521903.png",
+      "sizes": "192x192",
+      "type": "image/png"
     }
-  ],
-  "start_url": "./index.html",
-  "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#1e272e",
-  "background_color": "#121212"
+  ]
 }
