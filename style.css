@@ -1,164 +1,50 @@
 :root {
-    --primary: #27ae60;
-    --dark: #1e272e;
-    --light: #f1f2f6;
-    --accent: #2980b9;
-    --danger: #eb4d4b;
+    --primary: #2ecc71; --dark-bg: #1e272e; --card-bg: #ffffff;
+    --text-main: #2f3640; --text-muted: #7f8c8d; --danger: #e74c3c;
+    --accent: #3498db; --border-soft: rgba(0, 0, 0, 0.08);
 }
 
-body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    margin: 0;
-    background-color: var(--light);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 100px; /* Espacio para el menú inferior */
+body.dark-theme { 
+    --card-bg: #1e1e1e; --text-main: #e0e0e0; --border-soft: rgba(255, 255, 255, 0.1); 
+    background: #121212;
 }
 
-/* Encabezado */
-header {
-    background: linear-gradient(135deg, var(--dark) 0%, #2f3640 100%);
-    color: white;
-    width: 100%;
-    text-align: center;
-    padding: 3rem 0 4rem 0; /* Más espacio abajo para que la caja flote */
+body { font-family: 'Inter', sans-serif; margin: 0; background: #f1f2f6; color: var(--text-main); padding-bottom: 90px; transition: 0.3s; }
+
+header { background: var(--dark-bg); color: white; padding: 10px 0; text-align: center; border-radius: 0 0 20px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+.header-content { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+
+#tasa-dolar { 
+    background: rgba(52, 152, 219, 0.15); color: #3498db; 
+    border: 1px solid #3498db; font-size: 0.8rem; padding: 6px 15px; 
+    border-radius: 20px; margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px;
 }
 
-/* Contenedor universal para todas las tarjetas */
-.card, .balance-card {
-    width: 90%;            /* Mismo ancho para todas */
-    max-width: 450px;      /* Para que no se vea gigante en PC */
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-sizing: border-box; /* Asegura que el padding no estire la caja */
-    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
-}
+.balance-card { background: linear-gradient(135deg, #2c3e50, #1e272e); color: white; margin: 15px; padding: 25px; border-radius: 25px; text-align: center; }
+#total-amount { font-size: 2.6rem; font-weight: 800; color: var(--primary); margin: 0; line-height: 1; }
+.monto-usd-sub { display: block; font-size: 1.2rem; color: #bdc3c7; font-weight: 400; margin-top: 8px; }
 
-/* Ajuste específico para la caja de saldo */
-.balance-card {
-    margin-top: -50px;     /* Hace que suba y tape un poco al header */
-    text-align: center;
-}
+.stats-grid { display: flex; gap: 10px; margin-top: 20px; }
+.stat-item { flex: 1; padding: 12px; background: rgba(255,255,255,0.08); border-radius: 15px; font-size: 0.75rem; }
 
-#total-amount {
-    font-size: 3rem;
-    font-weight: 800;
-    color: var(--primary);
-    margin: 10px 0;
-}
+.ventas-graph { display: flex; align-items: flex-end; gap: 8px; height: 70px; margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 12px; }
+.graph-bar { flex: 1; background: var(--primary); border-radius: 3px; position: relative; min-height: 2px; }
+.graph-bar::after { content: attr(data-day); position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; opacity: 0.7; }
 
-/* Grupos de entrada (Formulario) */
-.input-group {
-    margin-bottom: 20px;
-}
+.card { background: var(--card-bg); margin: 15px; padding: 18px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.card-title { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: 700; }
 
-.input-group label {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: bold;
-    color: #7f8c8d;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-}
+.recent-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-soft); font-size: 0.85rem; }
+.type-venta { border-left: 3px solid var(--primary); padding-left: 10px; }
+.type-comision { border-left: 3px solid #e67e22; padding-left: 10px; }
 
-.input-group input, .input-group select {
-    width: 100%;
-    padding: 15px;
-    border: 2px solid #f1f1f1;
-    border-radius: 12px;
-    background: #f9f9f9;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
+.main-nav { position: fixed; bottom: 0; width: 100%; background: var(--card-bg); display: flex; padding: 10px 0 25px; border-top: 1px solid var(--border-soft); z-index: 1000; }
+.main-nav button { flex: 1; background: none; border: none; color: var(--text-muted); font-size: 0.65rem; font-weight: 600; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.main-nav button.active { color: var(--accent); }
 
-/* Botones principales */
-.btn-save {
-    width: 100%;
-    padding: 18px;
-    background: linear-gradient(to right, var(--primary), #2ecc71);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
-}
+input, select { width: 100%; padding: 14px; margin-bottom: 12px; border: 1px solid var(--border-soft); border-radius: 12px; background: var(--card-bg); color: var(--text-main); font-size: 1rem; box-sizing: border-box; outline: none; }
+.btn-save { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 700; cursor: pointer; }
 
-/* Inventario con botones alineados */
-.item-inventario {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.btn-qty {
-    background: var(--dark);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-left: 8px;
-}
-
-/* Menú inferior PWA */
-.actions {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    padding: 15px;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid #ddd;
-    box-sizing: border-box;
-}
-
-.btn-nav {
-    background: none;
-    border: none;
-    color: var(--dark);
-    font-weight: bold;
-    font-size: 0.8rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Botón de QR al lado del título */
-#btn-abrir-lector {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
-}
-
-#btn-abrir-lector:active {
-    transform: scale(0.9);
-}
-
-/* El contenedor del lector QR */
-#reader {
-    border-radius: 15px;
-    overflow: hidden;
-    border: 2px solid var(--accent) !important;
-}
-
-#reader video {
-    border-radius: 12px;
-}
+#loader { position: fixed; inset: 0; background: #1e272e; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
+.spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }

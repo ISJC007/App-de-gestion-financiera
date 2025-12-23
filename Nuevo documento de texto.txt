@@ -1,5 +1,7 @@
 
-git branch -M main
+git init
+git remote add origin https://github.com/ISJC007/App-de-gestion-financiera.git
 git add .
-git commit -m "Subiendo archivos de la app financiera"
+git commit -m "Mi primer push real"
+git branch -M main
 git push -u origin main

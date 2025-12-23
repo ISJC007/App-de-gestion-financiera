@@ -3,81 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finanzas Jefe PWA</title>
+    <title>Finanzas Jefe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2ecc71">
-    <script src="https://unpkg.com/html5-qrcode"></script>
 </head>
 <body>
+
+    <div id="loader">
+        <div class="spinner"></div>
+        <h2 style="color: white; margin-top: 15px; font-weight: 400;">Cargando Sistema...</h2>
+    </div>
+
     <header>
-        <h1>Finanzas Jefe</h1>
-        <div id="status-bar" style="font-size: 0.8rem; opacity: 0.8;">Conectado</div>
+        <div id="tasa-dolar"><i class="fa-solid fa-chart-line"></i> Conectando...</div>
+        <div class="header-content">
+            <h1 id="view-title" style="font-size: 1rem; margin:0; letter-spacing: 1px;">DASHBOARD</h1>
+            <button onclick="toggleDarkMode()" style="background:none; border:none; color:white; font-size:1.2rem;"><i class="fa-solid fa-circle-half-stroke"></i></button>
+        </div>
     </header>
 
-    <main id="app" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-        
-        <section class="balance-card">
-            <h2 style="font-size: 0.9rem; color: #7f8c8d; text-transform: uppercase;">Saldo en Caja</h2>
-            <p id="total-amount">$ 0.00</p>
-            <button id="btn-cierre" style="background:var(--dark); color:white; border:none; padding:12px; border-radius:10px; width:100%; font-weight:bold; cursor:pointer; font-size: 1rem;">Cierre de Día</button>
-        </section>
-
-        <section id="seccion-lector" class="card" style="display: none; overflow: hidden;">
-            <h3>Escanear Código QR</h3>
-            <div id="reader" style="width: 100%;"></div>
-            <button id="btn-cerrar-lector" style="margin-top: 10px; background:var(--danger); color:white; border:none; padding:10px; border-radius:8px; width:100%;">Cerrar Cámara</button>
-        </section>
-
-        <section id="form-venta" class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 style="margin: 0;">Registrar Venta</h3>
-                <button id="btn-abrir-lector" style="background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">📷 QR</button>
+    <main id="app">
+        <section id="view-inicio" class="view">
+            <div class="balance-card">
+                <small style="letter-spacing: 2px; opacity: 0.7;">BALANCE NETO EN BOLÍVARES</small>
+                <p id="total-amount">0.00 Bs.</p>
+                <span id="monto-usd-sub" class="monto-usd-sub">$ 0.00</span>
+                
+                <div class="stats-grid">
+                    <div class="stat-item"><i class="fa-solid fa-wallet"></i> <br><span id="stat-ingresos">$0</span></div>
+                    <div class="stat-item"><i class="fa-solid fa-receipt"></i> <br><span id="stat-gastos">$0</span></div>
+                    <div class="stat-item"><i class="fa-solid fa-user-clock"></i> <br><span id="stat-fiado">$0</span></div>
+                </div>
+                <div class="ventas-graph" id="grafica-semanal"></div>
             </div>
-            <form id="venta-form">
-                <div class="input-group">
-                    <label>Producto</label>
-                    <select id="producto-tipo">
-                        <option value="0">Zapatos</option>
-                        <option value="1">Cholas</option>
-                        <option value="2">Sandalias</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Talla y Monto</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="number" id="talla" placeholder="Talla" required>
-                        <input type="number" id="monto" step="0.01" placeholder="Precio $" required>
+
+            <div style="padding: 0 15px; display: flex; gap: 10px;">
+                <button class="btn-save" onclick="analizarDesdePortapapeles()" style="background:#9b59b6; padding:12px; flex:1.2;"><i class="fa-solid fa-paste"></i> IMPORTAR</button>
+                <button onclick="generarCierreCaja()" style="background:#e67e22; border:none; color:white; border-radius:12px; padding:12px; flex:1; font-weight:bold;"><i class="fa-solid fa-file-invoice"></i> CIERRE</button>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Actividad Reciente</div>
+                <div id="lista-resumen-inicio"></div>
+            </div>
+        </section>
+
+        <section id="view-ventas" class="view" style="display:none;">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-cart-plus"></i> Nueva Venta</div>
+                <form id="venta-form">
+                    <select id="producto-tipo" onchange="actualizarTallasVenta()" required></select>
+                    <select id="talla-venta" required></select>
+                    <input type="number" id="monto-venta" step="0.01" placeholder="Precio de venta $" required oninput="calcularVuelto()">
+                    
+                    <div style="background:rgba(0,0,0,0.03); padding:15px; border-radius:12px; margin-bottom:15px;">
+                        <small style="color:var(--text-muted)">Calculadora de Vuelto</small>
+                        <input type="number" id="paga-con" placeholder="Paga con: $" oninput="calcularVuelto()" style="margin-top:8px;">
+                        <div id="resultado-vuelto" style="font-weight:bold; color:var(--primary); font-size: 1.1rem;">Vuelto: $0.00</div>
                     </div>
-                </div>
-                <div class="input-group">
-                    <label>Método de Pago</label>
-                    <select id="metodo">
-                        <option value="Efective">Efectivo</option>
-                        <option value="Pago Móvil">Pago Móvil</option>
-                        <option value="Punto">Punto de Venta</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-save">REGISTRAR VENTA</button>
-            </form>
+
+                    <button type="submit" class="btn-save">FINALIZAR VENTA</button>
+                </form>
+            </div>
         </section>
 
-        <section id="seccion-inventario" class="card">
-            <h3>Stock Disponible</h3>
-            <div id="lista-inventario"></div>
+        <section id="view-stock" class="view" style="display:none;">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-boxes-packing"></i> Inventario</div>
+                <input type="text" id="nuevo-modelo-nombre" placeholder="Nombre del Modelo">
+                <div class="tallas-grid" id="tallas-selector"></div>
+                <button onclick="ejecutarNuevoLote()" class="btn-save" style="background:var(--accent); margin-top:10px;">AÑADIR A STOCK</button>
+            </div>
+            <div id="lista-inventario" style="padding-bottom:20px;"></div>
         </section>
 
-        <section id="seccion-historial" class="card">
-            <h3>Actividad Reciente</h3>
-            <div id="lista-historial"></div>
+        <section id="view-deudores" class="view" style="display:none;">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-user-pen"></i> Registrar Deuda</div>
+                <form id="deuda-form">
+                    <input type="text" id="deudor-nombre" placeholder="Nombre del Cliente" required>
+                    <input type="tel" id="deudor-telefono" placeholder="WhatsApp (0412...)">
+                    <input type="text" id="deudor-concepto" placeholder="¿Qué zapato se llevó?">
+                    <input type="number" id="deudor-monto" step="0.01" placeholder="Monto adeudado $" required>
+                    <button type="submit" class="btn-save" style="background:#f39c12">ANOTAR EN CUENTA</button>
+                </form>
+            </div>
+            <div id="lista-deudas"></div>
         </section>
 
+        <section id="view-servicio" class="view" style="display:none;">
+            <div class="card">
+                <div class="card-title"><i class="fa-solid fa-percent"></i> Cobro de Comisión</div>
+                <form id="servicio-form">
+                    <input type="text" id="cliente-nombre" placeholder="Nombre del Cliente" required>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="monto-servicio" placeholder="Monto $" style="flex:2">
+                        <input type="number" id="porcentaje-comision" value="5" style="flex:1">
+                    </div>
+                    <button type="submit" class="btn-save" style="background:#e67e22">REGISTRAR COMISIÓN</button>
+                </form>
+            </div>
+            <div id="lista-servicios"></div>
+        </section>
     </main>
 
-    <nav class="actions">
-        <button class="btn-nav" onclick="window.scrollTo({top:0, behavior:'smooth'})">🏠 Inicio</button>
-        <button class="btn-nav" id="btn-venta-nav">➕ Vender</button>
-        <button class="btn-nav" id="btn-stock-nav">📦 Stock</button>
+    <nav class="main-nav">
+        <button onclick="showView('inicio')" id="nav-inicio" class="active"><i class="fa-solid fa-house"></i>Inicio</button>
+        <button onclick="showView('ventas')" id="nav-ventas"><i class="fa-solid fa-sack-dollar"></i>Venta</button>
+        <button onclick="showView('stock')" id="nav-stock"><i class="fa-solid fa-boxes-stacked"></i>Stock</button>
+        <button onclick="showView('deudores')" id="nav-deudores"><i class="fa-solid fa-users"></i>Fiado</button>
+        <button onclick="showView('servicio')" id="nav-servicio"><i class="fa-solid fa-credit-card"></i>Punto</button>
     </nav>
 
     <script src="app.js"></script>
